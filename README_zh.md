@@ -2,7 +2,7 @@
 
 📖 [English](README.md) | 中文版
 
-护眼提醒插件的共享远程包，由 Lumi / Wakey 等 CofficLab 兄弟应用装配。
+护眼提醒插件的共享远程包，由 Lumi / Wakey 等 Lumi 家族兄弟应用装配。
 
 > 本插件不依赖任何其它插件。菜单栏、设置、说明书与存储全部经由 Provider 契约访问；
 > 通用的提醒能力由 `LumiKitReminder` 提供。
@@ -16,7 +16,7 @@
 
 ## 命名约定
 
-CofficLab 远程插件包统一遵循此约定：
+Lumi Softworks 远程插件包统一遵循此约定：
 
 | 仓库 | manifest `name:` | product / target |
 | --- | --- | --- |

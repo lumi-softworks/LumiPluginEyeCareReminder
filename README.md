@@ -2,7 +2,7 @@
 
 📖 English | [中文版](README_zh.md)
 
-Shared remote package for the "Eye Care Reminder" plugin, assembled by CofficLab sibling apps such as Lumi and Wakey.
+Shared remote package for the "Eye Care Reminder" plugin, assembled by Lumi family sibling apps such as Lumi and Wakey.
 
 > This plugin depends on no other plugins. The menu bar, settings, docs, and storage are all accessed through Provider contracts; the generic reminder capability is provided by `LumiKitReminder`.
 
@@ -15,7 +15,7 @@ Shared remote package for the "Eye Care Reminder" plugin, assembled by CofficLab
 
 ## Naming Convention
 
-CofficLab remote plugin packages follow this convention uniformly:
+Lumi Softworks remote plugin packages follow this convention uniformly:
 
 | Repository | manifest `name:` | product / target |
 | --- | --- | --- |
