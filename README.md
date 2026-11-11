@@ -38,7 +38,7 @@ Why: Xcode's package dependency list shows the upstream manifest's `Package(name
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/CofficLab/LumiPluginEyeCareReminder.git", from: "1.0.0")
+    .package(url: "https://github.com/lumi-softworks/LumiPluginEyeCareReminder.git", from: "1.0.0")
 ]
 ```
 

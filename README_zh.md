@@ -40,7 +40,7 @@ manifest 包名不带 `Lumi` 前缀时，用户在 Xcode 里就看不到这个�
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/CofficLab/LumiPluginEyeCareReminder.git", from: "1.0.0")
+    .package(url: "https://github.com/lumi-softworks/LumiPluginEyeCareReminder.git", from: "1.0.0")
 ]
 ```
 
