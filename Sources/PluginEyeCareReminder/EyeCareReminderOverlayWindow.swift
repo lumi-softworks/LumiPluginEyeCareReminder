@@ -1,4 +1,3 @@
-import AppKit
 import KitReminder
 import SwiftUI
 

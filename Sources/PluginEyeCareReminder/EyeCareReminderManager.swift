@@ -118,6 +118,8 @@ class EyeCareReminderManager: NSObject, SuperLog {
         self.isActive = true
         environment.saveActiveState(true, forKey: activeStateKey)
         self.startTime = environment.now()
+        // iOS 后台到点提醒只能靠本地通知，首次开启时请求授权。
+        environment.requestNotificationAuthorization()
         scheduleNextBreak()
 
         if Self.verbose {
@@ -140,13 +142,11 @@ class EyeCareReminderManager: NSObject, SuperLog {
 
         environment.cancel(timer)
         timer = nil
+        environment.cancelNotification(kind: .eyeCare)
         isActive = false
         environment.saveActiveState(false, forKey: activeStateKey)
         nextBreakTime = nil
         startTime = nil
-
-        // Remove pending notifications
-        // UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 
     /// Snooze for specified minutes
@@ -228,17 +228,30 @@ class EyeCareReminderManager: NSObject, SuperLog {
 
     /// Schedule next break
     private func scheduleNextBreak() {
-        scheduleBreak(in: selectedInterval)
+        scheduleBreak(in: selectedInterval, repeats: true)
     }
 
     /// Schedule a break after specified interval
-    /// - Parameter interval: Interval in seconds
-    private func scheduleBreak(in interval: TimeInterval) {
+    /// - Parameters:
+    ///   - interval: Interval in seconds
+    ///   - repeats: 是否按同一间隔持续提醒（正常节奏为真，「稍后提醒」为假）
+    private func scheduleBreak(in interval: TimeInterval, repeats: Bool = false) {
         environment.cancel(timer)
         nextBreakTime = environment.now().addingTimeInterval(interval)
         timer = environment.schedule(after: interval) { [weak self] in
             self?.fireBreakReminder()
         }
+        environment.scheduleNotification(
+            kind: .eyeCare,
+            after: interval,
+            repeats: repeats,
+            title: String(localized: "Eye Care", table: "EyeCareReminder", bundle: .module),
+            body: String(
+                localized: "Look away from the screen for 20 seconds to rest your eyes.",
+                table: "EyeCareReminder",
+                bundle: .module
+            )
+        )
     }
 
     /// Fire break reminder

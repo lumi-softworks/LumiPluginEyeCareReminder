@@ -1,10 +1,12 @@
 import SwiftUI
 
 /// Status bar popup view for the Eye Care Reminder plugin
-struct EyeCareReminderPopupView: View {
+public struct EyeCareReminderPopupView: View {
     @State private var manager = EyeCareReminderManager.shared
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         VStack(spacing: 0) {
             // Header with plugin name
             HStack {

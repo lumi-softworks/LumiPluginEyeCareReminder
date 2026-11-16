@@ -44,38 +44,34 @@ struct EyeCareReminderStatusInfo: View {
 
 /// 「下一次休息」倒计时。
 ///
-/// 只按分钟粒度刷新（60 秒一次），并且仅在提醒运行中、存在下一次休息时间时
-/// 才被创建——避免 1 Hz 计时器在弹窗关闭后仍持续唤醒主线程。
+/// 用 `TimelineView` 按分钟刷新：`Timer.publish` 在视图因提醒重排而频繁
+/// 重建时会失效，`now` 停在创建时刻，倒计时会越显示越长。
 private struct NextBreakCountdown: View {
     let nextBreak: Date
 
-    @State private var now = Date()
-    private let timer = Timer.publish(every: 60, tolerance: 10, on: .main, in: .common).autoconnect()
-
     var body: some View {
-        if nextBreak > now {
-            let minutes = Int(nextBreak.timeIntervalSince(now)) / 60
-            HStack {
-                Image(systemName: "clock")
-                    .font(.system(size: 9))
+        TimelineView(.periodic(from: .now, by: 60)) { context in
+            if nextBreak > context.date {
+                let minutes = Int(nextBreak.timeIntervalSince(context.date)) / 60
+                HStack {
+                    Image(systemName: "clock")
+                        .font(.system(size: 9))
+                        .foregroundColor(.secondary)
+
+                    Group {
+                        if minutes < 1 {
+                            Text("Next break: less than 1 min", tableName: "EyeCareReminder", bundle: .module)
+                        } else if minutes == 1 {
+                            Text("Next break: 1 min", tableName: "EyeCareReminder", bundle: .module)
+                        } else {
+                            Text(String(format: String(localized: "Next break: %lld mins", table: "EyeCareReminder", bundle: .module), minutes))
+                        }
+                    }
+                    .font(.system(size: 10))
                     .foregroundColor(.secondary)
 
-                Group {
-                    if minutes < 1 {
-                        Text("Next break: less than 1 min", tableName: "EyeCareReminder", bundle: .module)
-                    } else if minutes == 1 {
-                        Text("Next break: 1 min", tableName: "EyeCareReminder", bundle: .module)
-                    } else {
-                        Text(String(format: String(localized: "Next break: %lld mins", table: "EyeCareReminder", bundle: .module), minutes))
-                    }
+                    Spacer()
                 }
-                .font(.system(size: 10))
-                .foregroundColor(.secondary)
-
-                Spacer()
-            }
-            .onReceive(timer) { _ in
-                now = Date()
             }
         }
     }
