@@ -12,11 +12,15 @@ struct EyeCareMobileView: View {
     private static let stopTitle = String(localized: "Stop", table: "EyeCareReminder", bundle: .module)
 
     var body: some View {
+        // 撑满可见高度：间隔选项按宽度换行完整展示，
+        // 主操作按钮落到页面底部，拇指可达且不留大片空区。
         VStack(alignment: .leading, spacing: 16) {
             statusCard
-            actionButton
             intervalSection
+            Spacer(minLength: 24)
+            actionButton
         }
+        .containerRelativeFrame(.vertical)
         .accessibilityIdentifier("\(accessibilityIdentifierPrefix).mobile")
     }
 
@@ -50,7 +54,7 @@ struct EyeCareMobileView: View {
                 } icon: {
                     Image(systemName: "zzz")
                 }
-                .font(.subheadline)
+                .font(.title3.weight(.medium))
                 .foregroundStyle(.secondary)
             }
         }
@@ -85,11 +89,14 @@ struct EyeCareMobileView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(manager.availableIntervals) { option in
-                        intervalChip(option)
-                    }
+            // 预设 + 自定义间隔数量不定；按可用宽度换行，避免横向滚动把选项裁掉。
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 84), spacing: 8)],
+                alignment: .leading,
+                spacing: 8
+            ) {
+                ForEach(manager.availableIntervals) { option in
+                    intervalChip(option)
                 }
             }
         }
@@ -102,7 +109,7 @@ struct EyeCareMobileView: View {
         } label: {
             Text(option.displayName)
                 .font(.subheadline.weight(.medium))
-                .padding(.horizontal, 14)
+                .frame(maxWidth: .infinity)
                 .padding(.vertical, 8)
                 .foregroundStyle(isSelected ? tint : .primary)
                 .background(
@@ -118,8 +125,8 @@ struct EyeCareMobileView: View {
             if nextBreak > context.date {
                 let minutes = Int(nextBreak.timeIntervalSince(context.date)) / 60
                 Label(countdownTitle(minutes: minutes), systemImage: "clock")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(.primary)
             }
         }
     }
