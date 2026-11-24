@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/lumi-softworks/LumiKernel.git", from: "1.1.0"),
         .package(url: "https://github.com/lumi-softworks/LumiSettings.git", from: "1.1.0"),
         .package(url: "https://github.com/lumi-softworks/LumiUI.git", from: "1.13.1"),
-        .package(url: "https://github.com/lumi-softworks/LumiProviders.git", from: "1.26.0")
+        .package(url: "https://github.com/lumi-softworks/LumiProviders.git", from: "1.28.0"),
     ],
     targets: [
         .target(
@@ -30,6 +30,7 @@ let package = Package(
                 .product(name: "ProviderMenuBar", package: "LumiProviders"),
                 .product(name: "ProviderStorage", package: "LumiProviders"),
                 .product(name: "ProviderDocsView", package: "LumiProviders"),
+                .product(name: "ProviderMobileTabBar", package: "LumiProviders"),
                 .product(name: "LumiUI", package: "LumiUI")
             ],
             path: "Sources/PluginEyeCareReminder",

@@ -2,6 +2,7 @@ import KernelCore
 import OSLog
 import ProviderDocsView
 import ProviderMenuBar
+import ProviderMobileTabBar
 import ProviderStorage
 import ProviderSettingView
 import SwiftUI
@@ -61,6 +62,7 @@ public final class PluginEyeCareReminder: SuperPlugin {
         }
 
         try contributeMenuBar(to: kernel)
+        try contributeMobileTab(to: kernel)
 
         // 设置页标签
         kernel.resolveProvider((any SettingViewProviding).self)?
@@ -76,6 +78,7 @@ public final class PluginEyeCareReminder: SuperPlugin {
 
     public func onEnable(kernel: KernelCoreContainer) async throws {
         try contributeMenuBar(to: kernel)
+        try contributeMobileTab(to: kernel)
     }
 
     public func onShutdown(kernel: KernelCoreContainer) throws {
@@ -100,5 +103,26 @@ public final class PluginEyeCareReminder: SuperPlugin {
         ) {
             EyeCareReminderPopupView()
         })
+    }
+
+    /// 往 iOS 底部标签页插入本插件的整页 UI；macOS 无此注册表，自动跳过。
+    private func contributeMobileTab(to kernel: KernelCoreContainer) throws {
+        guard let tabs = kernel.resolveProvider((any MobileTabBarProviding).self) else { return }
+        let ownerID = id
+        try kernel.trackContribution {
+            tabs.removeItems(ownedBy: ownerID)
+        }
+        let prefix = configuration.accessibilityIdentifierPrefix
+        tabs.addItems([
+            MobileTabBarItem(
+                id: configuration.mobileTabID,
+                title: metadata.name,
+                systemImage: "eye.fill",
+                order: order,
+                ownerPluginID: id
+            ) {
+                AnyView(EyeCareMobileView(accessibilityIdentifierPrefix: prefix))
+            }
+        ])
     }
 }

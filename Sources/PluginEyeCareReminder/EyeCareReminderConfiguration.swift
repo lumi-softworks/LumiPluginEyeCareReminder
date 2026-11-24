@@ -27,13 +27,18 @@ public struct EyeCareReminderConfiguration: Sendable {
     /// 设置页控件的无障碍标识前缀。
     public let accessibilityIdentifierPrefix: String
 
+    /// iOS 底部标签页 id。宿主沿用旧选中项时可注入历史值，默认由插件 id 派生。
+    public let mobileTabID: String
+
     public init(
         pluginID: String = EyeCareReminderConfiguration.defaultPluginID,
         loggerSubsystem: String = EyeCareReminderConfiguration.defaultLoggerSubsystem,
-        accessibilityIdentifierPrefix: String = "eyecare"
+        accessibilityIdentifierPrefix: String = "eyecare",
+        mobileTabID: String? = nil
     ) {
         self.pluginID = pluginID
         self.loggerSubsystem = loggerSubsystem
         self.accessibilityIdentifierPrefix = accessibilityIdentifierPrefix
+        self.mobileTabID = mobileTabID ?? "\(pluginID).mobile"
     }
 }
